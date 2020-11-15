@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe</title>
+  </head>
+  <body>
+    <!-- 
+      overlay for game setting
+      - tic tac toe (message)
+      - mode selection ( ai or human)
+      - player1 name (optional)
+      - if player 2 mode is selected, pop up enter player 2 name (optional)
+      - Select marker X or O, (if player 2 is selected, specify player 1, select marker)
+      - button start, animate up
+     -->
+    <div class="overlay" id="settings"></div>
+
+    <!-- 
+      container for board
+      - table with 3 rows and 3 columns
+      - background image marker
+     -->
+    <div class="container"></div>
+
+    <!-- 
+       overlay for winning message
+       - ${winner} wins!
+       - play again? (button), if clicked, clear board, keep settings
+       - change settings (button). if clicked, fade in settings overlay
+     -->
+    <div class="overlay" id="endgame"></div>
+  </body>
+</html>
