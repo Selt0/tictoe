@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Text:wght@400;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
     <title>Tic Tac Toe</title>
   </head>
   <body>
@@ -15,14 +21,67 @@
       - Select marker X or O, (if player 2 is selected, specify player 1, select marker)
       - button start, animate up
      -->
-    <div class="overlay" id="settings"></div>
+    <div class="overlay" id="settings">
+      <section class="menu">
+        <h1>Tic Tac Toe</h1>
+        <h2>Game Modes:</h2>
+        <div class="modes">
+          <buton id="ai" class="mode">A.I.</buton>
+          <div id="player2Mode" class="mode">Player 2</div>
+        </div>
+        <div class="usernames">
+          <input
+            type="text"
+            id="player1"
+            class="nameInput"
+            placeholder="Player 1 (Optional)"
+            maxlength="15"
+          />
+          <input
+            type="text"
+            id="player2"
+            class="nameInput"
+            placeholder="Player 2 (Optional)"
+            maxlength="15"
+          />
+        </div>
+        <h2>Choose Marker:</h2>
+        <div class="markers">
+          <buton id="x" class="mark">
+            <img src="images/002-x.svg" alt="x" />
+          </buton>
+          <buton id="o" class="mark"><img src="images/001-o.svg" alt="o" /></buton>
+        </div>
+        <button class="start">START</button>
+      </section>
+    </div>
 
     <!-- 
       container for board
       - table with 3 rows and 3 columns
       - background image marker
      -->
-    <div class="container"></div>
+    <div class="container">
+      <table class="board">
+        <tbody>
+          <tr class="row">
+            <td class="tile"></td>
+            <td class="tile midCol"></td>
+            <td class="tile"></td>
+          </tr>
+          <tr class="row midRow">
+            <td class="tile"></td>
+            <td class="tile midCol"></td>
+            <td class="tile"></td>
+          </tr>
+          <tr class="row">
+            <td class="tile"></td>
+            <td class="tile midCol"></td>
+            <td class="tile"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- 
        overlay for winning message
@@ -30,6 +89,8 @@
        - play again? (button), if clicked, clear board, keep settings
        - change settings (button). if clicked, fade in settings overlay
      -->
-    <div class="overlay" id="endgame"></div>
+    <div class="overlay" id="endgame">
+      <section class="menu"></section>
+    </div>
   </body>
 </html>
