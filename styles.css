@@ -1,0 +1,170 @@
+:root {
+  --background: #264653;
+  --menuBackground: #2a9d8f;
+  --color: #e9c46a;
+  --border: #f4a261;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Big Shoulders Stencil Text', cursive;
+}
+
+h1 {
+  font-size: 4em;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+img {
+  width: 100%;
+}
+
+button {
+  border: 2px solid var(--border);
+  border-radius: 15px;
+  padding: 15px 25px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.5rem;
+  background-color: transparent;
+  color: inherit;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--background);
+}
+
+/* OVERLAY */
+
+.overlay {
+  position: fixed;
+  /* display: none; */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--menuBackground);
+  border-radius: 15px;
+  border: 5px solid var(--border);
+  padding: 3em;
+  text-align: center;
+  color: var(--color);
+}
+
+/* GAME SETTINGS */
+
+.modes {
+  display: flex;
+  width: 65%;
+  margin-bottom: 20px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.mode {
+  border: 2px solid var(--border);
+  border-radius: 15px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.usernames {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  margin-bottom: 30px;
+}
+
+.nameInput {
+  text-align: center;
+  font-family: inherit;
+  width: 8.3em;
+  font-size: 1.1rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid var(--border);
+  color: var(--color);
+  padding: 5px;
+}
+
+#player2 {
+  display: none;
+}
+
+.markers {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  width: 75%;
+}
+
+.mark {
+  width: 75px;
+  height: 75px;
+  border: 2px solid var(--border);
+  border-radius: 15px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* END GAME MESSAGE */
+
+#endgame {
+  display: none;
+}
+
+/* BOARD */
+
+.board {
+  border-collapse: collapse;
+}
+
+.tile {
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+}
+
+.midRow {
+  border-top: 5px solid var(--color);
+  border-bottom: 5px solid var(--color);
+}
+
+.midCol {
+  border-left: 5px solid var(--color);
+  border-right: 5px solid var(--color);
+}
+
+/* MARKERS */
+.x {
+  background: url(images/002-x.svg) no-repeat center;
+  background-size: contain;
+}
+
+.o {
+  background: url(images/001-o.svg) no-repeat center;
+  background-size: contain;
+}
