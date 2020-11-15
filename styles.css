@@ -3,6 +3,8 @@
   --menuBackground: #2a9d8f;
   --color: #e9c46a;
   --border: #f4a261;
+  --hover: ivory;
+  --selected: #e76f51;
 }
 
 * {
@@ -35,19 +37,31 @@ button {
   color: inherit;
 }
 
+button:hover {
+  background-color: var(--hover);
+}
+.selected {
+  background-color: var(--selected);
+}
+
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background: var(--background);
 }
 
+.turnDisplay {
+  margin-bottom: 25px;
+  color: var(--color);
+}
+
 /* OVERLAY */
 
 .overlay {
   position: fixed;
-  /* display: none; */
   width: 100%;
   height: 100%;
   top: 0;
@@ -73,7 +87,7 @@ button {
   color: var(--color);
 }
 
-/* GAME SETTINGS */
+/* GAME MENU */
 
 .modes {
   display: flex;
@@ -101,13 +115,21 @@ button {
 .nameInput {
   text-align: center;
   font-family: inherit;
-  width: 8.3em;
-  font-size: 1.1rem;
+  width: 120px;
+  height: 50px;
+  font-size: 1.5rem;
   background: transparent;
   border: 0;
   border-bottom: 2px solid var(--border);
   color: var(--color);
   padding: 5px;
+}
+
+.nameInput:placeholder-shown {
+  font-size: 1em;
+}
+.nameInput:focus {
+  outline: none;
 }
 
 #player2 {
