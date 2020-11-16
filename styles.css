@@ -158,6 +158,10 @@ button:hover {
   display: none;
 }
 
+#mainMenuBtn {
+  margin-bottom: 30px;
+}
+
 /* BOARD */
 
 .board {
