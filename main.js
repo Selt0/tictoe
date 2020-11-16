@@ -8,15 +8,19 @@ const DOM = (() => {
     startBtn: document.querySelector('.start'),
     modeBtns: document.querySelectorAll('.mode'),
     markBtns: document.querySelectorAll('.mark'),
-    player1: document.querySelector('#player1'),
+    player1Input: document.querySelector('#player1'),
     player2Mode: document.querySelector('#player2Mode'),
-    player2: document.querySelector('#player2'),
+    player2Input: document.querySelector('#player2'),
     turnDisplay: document.querySelector('.turnDisplay'),
     tiles: document.querySelectorAll('.tile'),
     mainMenuBtn: document.querySelector('#mainMenuBtn'),
     playAgainBtn: document.querySelector('#playAgain'),
   };
 })();
+
+const players = (mark, name) => {
+  return { mark, name };
+};
 
 // display module
 const displayController = (() => {
@@ -82,15 +86,11 @@ const displayController = (() => {
       DOM.gameOverMenu.classList.remove('animate__animated', 'animate__lightSpeedInLeft');
     }, 1000);
 
-    DOM.gameOverMessage.textContent = Gameboard.message();
+    DOM.gameOverMessage.textContent = Game.message();
   };
 
   return { endGame };
 })();
-
-const players = (mark, name) => {
-  return { mark, name };
-};
 
 const Game = (() => {
   let currentPlayer;
@@ -98,10 +98,10 @@ const Game = (() => {
   let player2;
   const newGame = (mark, mode) => {
     const oppMark = mark == 'x' ? 'o' : 'x';
-    player1 = players(mark, DOM.player1.value || 'Player 1');
+    player1 = players(mark, DOM.player1Input.value || 'Player 1');
     player2 =
       mode == 'player2Mode'
-        ? players(oppMark, DOM.player2.value || 'Player 2')
+        ? players(oppMark, DOM.player2Input.value || 'Player 2')
         : players(oppMark, 'AI Jefferson');
     Gameboard.newBoard();
     currentPlayer = player1;
@@ -112,15 +112,16 @@ const Game = (() => {
     // place mark
     DOM.tiles.forEach((tile) => {
       tile.addEventListener('click', (e) => {
-        Gameboard.markBoard(currentPlayer.mark, e.target.id);
-        switchTurn();
-        takeTurn();
+        if (Gameboard.markBoard(currentPlayer.mark, e.target.id)) {
+          switchTurn();
+          takeTurn();
+        }
       });
     });
   };
 
   const gameOver = () => {
-    return Gameboard.fullBoard();
+    return Gameboard.fullBoard() || Gameboard.checkWin();
   };
 
   const switchTurn = () => {
@@ -131,14 +132,25 @@ const Game = (() => {
     if (!gameOver()) {
       DOM.turnDisplay.textContent = `${currentPlayer.name}'s turn!`;
     } else {
-      displayController.endGame(Gameboard.message());
+      displayController.endGame();
     }
   };
-  return { newGame };
+
+  const message = () => {
+    if (Gameboard.winner()) {
+      return Gameboard.winner() == player1.mark
+        ? `${player1.name} has won!`
+        : `${player2.name} has won!`;
+    } else {
+      return 'DRAW';
+    }
+  };
+  return { newGame, gameOver, message };
 })();
 
 const Gameboard = (() => {
   let board = [];
+  let winningMark = null;
 
   const newBoard = () => {
     board = Array(9).fill('');
@@ -149,7 +161,7 @@ const Gameboard = (() => {
     if (!validPos(pos)) return;
     board[index] = mark;
     pos.classList.add(mark);
-    console.log(board);
+    return true;
   };
 
   const validPos = (pos) => {
@@ -167,10 +179,34 @@ const Gameboard = (() => {
     });
   };
 
-  const checkWin = () => {};
+  const checkWin = () => {
+    if (board.filter((mark) => mark != '').length >= 4) {
+      const winConditions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
 
-  const message = () => {
-    return `player 1 won the game!`;
+      winConditions.forEach((combo, index) => {
+        if (
+          board[combo[0]] &&
+          board[combo[0]] === board[combo[1]] &&
+          board[combo[0]] === board[combo[2]]
+        ) {
+          winningMark = board[combo[0]];
+        }
+      });
+      return winningMark;
+    }
   };
-  return { newBoard, fullBoard, clearBoard, markBoard, message };
+
+  const winner = () => {
+    return winningMark;
+  };
+  return { newBoard, fullBoard, clearBoard, markBoard, checkWin, winner };
 })();
