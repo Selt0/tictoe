@@ -78,6 +78,7 @@ const displayController = (() => {
 
     mark = document.querySelector('.mark.selected').id;
     mode = document.querySelector('.mode.selected').id;
+    Game.init();
     Game.newGame(mark, mode);
   };
 
@@ -107,6 +108,20 @@ const Game = (() => {
   let currentPlayer;
   let player1;
   let player2;
+
+  const init = () => {
+    // place mark
+    DOM.tiles.forEach((tile) => {
+      tile.addEventListener('click', (e) => {
+        if (currentPlayer.name == 'AI Jefferson') return;
+        if (Gameboard.markBoard(currentPlayer.mark, e.target.id)) {
+          switchTurn();
+          takeTurn();
+        }
+      });
+    });
+  };
+
   const newGame = (mark, mode) => {
     const oppMark = mark == 'x' ? 'o' : 'x';
     player1 = players(mark, DOM.player1Input.value || 'Player 1');
@@ -117,19 +132,6 @@ const Game = (() => {
     Gameboard.newBoard();
     currentPlayer = player1;
     DOM.turnDisplay.textContent = `${currentPlayer.name}'s turn!`;
-    run();
-  };
-
-  const run = () => {
-    // place mark
-    DOM.tiles.forEach((tile) => {
-      tile.addEventListener('click', (e) => {
-        if (Gameboard.markBoard(currentPlayer.mark, e.target.id)) {
-          switchTurn();
-          takeTurn();
-        }
-      });
-    });
   };
 
   const gameOver = () => {
@@ -148,9 +150,9 @@ const Game = (() => {
       if (currentPlayer.name == 'AI Jefferson') {
         setTimeout(() => {
           Gameboard.computerplay(player2.mark);
+          switchTurn();
           takeTurn();
         }, 1000);
-        switchTurn();
       }
     }
   };
@@ -164,7 +166,7 @@ const Game = (() => {
       return 'DRAW';
     }
   };
-  return { newGame, gameOver, message };
+  return { newGame, gameOver, message, init };
 })();
 
 const Gameboard = (() => {
@@ -229,9 +231,7 @@ const Gameboard = (() => {
 
   const computerplay = (mark) => {
     let choices = board.map((tile, index) => (!tile ? index : '')).filter(String);
-    console.log(`${choices}`);
     const pos = choices[Math.floor(Math.random() * choices.length)];
-    console.log(`${pos}`);
     markBoard(mark, pos);
   };
 
