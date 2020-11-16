@@ -24,6 +24,9 @@ const players = (mark, name) => {
 
 // display module
 const displayController = (() => {
+  let mark;
+  let mode;
+
   const makeActive = (btns) => {
     btns.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -40,6 +43,11 @@ const displayController = (() => {
     });
   };
 
+  const addAnimation = (ele, animation) => {
+    ele.classList.add('animate__animated', animation);
+    setTimeout(() => ele.classList.remove('animate__animated', animation), 1000);
+  };
+
   // check if buttons are selected
   const checkSelected = (btns) => {
     return Array.from(btns).find((btn) => btn.classList.contains('selected'));
@@ -48,10 +56,7 @@ const displayController = (() => {
   // add and remove shake class to butttons
   const shakeBtns = (btns) => {
     btns.forEach((btn) => {
-      btn.classList.add('animate__animated', 'animate__shakeX');
-      setTimeout(() => {
-        btn.classList.remove('animate__animated', 'animate__shakeX');
-      }, 1000);
+      addAnimation(btn, 'animate__shakeX');
     });
   };
 
@@ -68,25 +73,31 @@ const displayController = (() => {
 
   // start game
   const gameStart = () => {
-    DOM.mainMenu.classList.add('animate__animated', 'animate__slideOutUp');
-    setTimeout(() => {
-      DOM.mainMenu.classList.remove('animate__animated', 'animate__slideOutUp');
-      DOM.mainMenu.style.display = 'none';
-    }, 1000);
+    addAnimation(DOM.mainMenu, 'animate__slideOutUp');
+    DOM.mainMenu.style.display = 'none';
 
-    const mark = document.querySelector('.mark.selected').id;
-    const mode = document.querySelector('.mode.selected').id;
+    mark = document.querySelector('.mark.selected').id;
+    mode = document.querySelector('.mode.selected').id;
     Game.newGame(mark, mode);
   };
 
   const endGame = () => {
     DOM.gameOverOverlay.style.display = 'block';
-    DOM.gameOverMenu.classList.add('animate__animated', 'animate__lightSpeedInLeft');
-    setTimeout(() => {
-      DOM.gameOverMenu.classList.remove('animate__animated', 'animate__lightSpeedInLeft');
-    }, 1000);
-
+    addAnimation(DOM.gameOverMenu, 'animate__lightSpeedInLeft');
     DOM.gameOverMessage.textContent = Game.message();
+
+    DOM.playAgainBtn.addEventListener('click', () => {
+      addAnimation(DOM.gameOverMenu, 'animate__lightSpeedOutRight');
+      DOM.gameOverOverlay.style.display = 'none';
+      Game.newGame(mark, mode);
+    });
+
+    DOM.mainMenuBtn.addEventListener('click', () => {
+      addAnimation(DOM.gameOverOverlay, 'animate__fadeOut');
+      DOM.mainMenu.style.display = 'block';
+      addAnimation(DOM.mainMenu, 'animate__fadeIn');
+      setTimeout(() => (DOM.gameOverOverlay.style.display = 'none'), 1000);
+    });
   };
 
   return { endGame };
@@ -105,6 +116,7 @@ const Game = (() => {
         : players(oppMark, 'AI Jefferson');
     Gameboard.newBoard();
     currentPlayer = player1;
+    DOM.turnDisplay.textContent = `${currentPlayer.name}'s turn!`;
     run();
   };
 
@@ -121,7 +133,7 @@ const Game = (() => {
   };
 
   const gameOver = () => {
-    return Gameboard.fullBoard() || Gameboard.checkWin();
+    return Gameboard.checkWin() || Gameboard.fullBoard();
   };
 
   const switchTurn = () => {
@@ -129,10 +141,17 @@ const Game = (() => {
   };
 
   const takeTurn = () => {
-    if (!gameOver()) {
-      DOM.turnDisplay.textContent = `${currentPlayer.name}'s turn!`;
+    if (gameOver()) {
+      return displayController.endGame();
     } else {
-      displayController.endGame();
+      DOM.turnDisplay.textContent = `${currentPlayer.name}'s turn!`;
+      if (currentPlayer.name == 'AI Jefferson') {
+        setTimeout(() => {
+          Gameboard.computerplay(player2.mark);
+          takeTurn();
+        }, 1000);
+        switchTurn();
+      }
     }
   };
 
@@ -153,6 +172,8 @@ const Gameboard = (() => {
   let winningMark = null;
 
   const newBoard = () => {
+    clearBoard();
+    winningMark = null;
     board = Array(9).fill('');
   };
 
@@ -174,8 +195,7 @@ const Gameboard = (() => {
 
   const clearBoard = () => {
     DOM.tiles.forEach((tile) => {
-      tile.classList.remove('x');
-      tile.classList.remove('o');
+      tile.classList.remove('x', 'o');
     });
   };
 
@@ -191,15 +211,13 @@ const Gameboard = (() => {
         [0, 4, 8],
         [2, 4, 6],
       ];
-
-      winConditions.forEach((combo, index) => {
+      winConditions.forEach((condition) => {
         if (
-          board[combo[0]] &&
-          board[combo[0]] === board[combo[1]] &&
-          board[combo[0]] === board[combo[2]]
-        ) {
-          winningMark = board[combo[0]];
-        }
+          board[condition[0]] &&
+          board[condition[0]] === board[condition[1]] &&
+          board[condition[0]] === board[condition[2]]
+        )
+          winningMark = board[condition[0]];
       });
       return winningMark;
     }
@@ -208,5 +226,14 @@ const Gameboard = (() => {
   const winner = () => {
     return winningMark;
   };
-  return { newBoard, fullBoard, clearBoard, markBoard, checkWin, winner };
+
+  const computerplay = (mark) => {
+    let choices = board.map((tile, index) => (!tile ? index : '')).filter(String);
+    console.log(`${choices}`);
+    const pos = choices[Math.floor(Math.random() * choices.length)];
+    console.log(`${pos}`);
+    markBoard(mark, pos);
+  };
+
+  return { newBoard, fullBoard, clearBoard, markBoard, checkWin, winner, computerplay };
 })();
