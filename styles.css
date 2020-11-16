@@ -128,6 +128,7 @@ button:hover {
 .nameInput:placeholder-shown {
   font-size: 1em;
 }
+
 .nameInput:focus {
   outline: none;
 }
@@ -193,4 +194,57 @@ button:hover {
 .o {
   background: url(images/001-o.svg) no-repeat center;
   background-size: contain;
+}
+
+/* MEDIA QUERY */
+
+/* Medium devices (tablets, 768px and under) */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 3em;
+  }
+  .modes {
+    width: 85%;
+  }
+  .menu {
+    padding: 2em;
+  }
+  .mode {
+    padding: 5px 10px;
+  }
+
+  .mark {
+    width: 60px;
+    height: 60px;
+  }
+
+  .nameInput {
+    width: 90px;
+  }
+
+  .nameInput:placeholder-shown {
+    font-size: 0.8em;
+  }
+
+  .tile {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Small devices (landscape phones, 576px and under) */
+@media (max-width: 576px) {
+  h1 {
+    font-size: 2em;
+  }
+  .menu {
+    width: 300px;
+  }
+  .modes {
+    width: 100%;
+  }
+  .tile {
+    width: 125px;
+    height: 125px;
+  }
 }
