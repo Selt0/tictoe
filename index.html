@@ -75,19 +75,19 @@
       <table class="board">
         <tbody>
           <tr class="row">
-            <td class="tile"></td>
-            <td class="tile midCol"></td>
-            <td class="tile"></td>
+            <td class="tile" id="0"></td>
+            <td class="tile midCol" id="1"></td>
+            <td class="tile" id="2"></td>
           </tr>
           <tr class="row midRow">
-            <td class="tile"></td>
-            <td class="tile midCol"></td>
-            <td class="tile"></td>
+            <td class="tile" id="3"></td>
+            <td class="tile midCol" id="4"></td>
+            <td class="tile" id="5"></td>
           </tr>
           <tr class="row">
-            <td class="tile"></td>
-            <td class="tile midCol"></td>
-            <td class="tile"></td>
+            <td class="tile" id="6"></td>
+            <td class="tile midCol" id="7"></td>
+            <td class="tile" id="8"></td>
           </tr>
         </tbody>
       </table>
@@ -100,7 +100,11 @@
        - change settings (button). if clicked, fade in settings overlay
      -->
     <div class="overlay" id="endgame">
-      <section class="menu"></section>
+      <section class="menu" id="endgameMessage">
+        <h2 id="message"></h2>
+        <button id="mainMenuBtn">Main Menu</button>
+        <button id="playAgain">PLAY AGAIN</button>
+      </section>
     </div>
 
     <script src="main.js"></script>
